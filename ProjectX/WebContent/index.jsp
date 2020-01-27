@@ -22,12 +22,12 @@
 
 
 
- <!--
+
 <br><br>
 <form action="BusStops">
 City:<input type="text" name="cityName">
 <input type="submit" value="Search bus stops">
-</form>-->
+</form>
 <br>
 <form action="Servlet2">
 <input type="submit" value="Your last searched bus">
