@@ -157,46 +157,46 @@ public class Servlet2 extends HttpServlet {
 			if (tempString.charAt(ii)=='�') {
 				StringBuffer s1 = new StringBuffer(tempString);
 				switch (tempString.charAt(ii+1)) {
-					case '�':{
-						s1.replace(tempString.indexOf("�"), tempString.indexOf("�")+1, "�");
+					case '¶':{
+						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¶")+1, "ö");
 						tempString = s1.toString();
 						break;
 					}
-					case '�':{
-						s1.replace(tempString.indexOf("�"), tempString.indexOf("�")+1, "�");
-						tempString = s1.toString();
-						break;
-					}
-					case '�':{
-						s1.replace(tempString.indexOf("�"), tempString.indexOf("�")+1, "�");
-						tempString = s1.toString();
-						break;
-					}
+					case '¥':{
+ 						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¥")+1, "å");
+ 						tempString = s1.toString();
+ 						break;
+ 					}
+					case '¤':{
+ 						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¤")+1, "ä");
+ 						tempString = s1.toString();
+ 						break;
+ 					}
 					case '?':{
 						s1.replace(tempString.indexOf("�"), tempString.indexOf("?")+1, "�");
 						tempString = s1.toString();
 						break;
 					}
-					case '�':{
-						s1.replace(tempString.indexOf("�"), tempString.indexOf("�")+1, "�");
-						tempString = s1.toString();
-						break;
-					}
-					case '�':{
-						s1.replace(tempString.indexOf("�"), tempString.indexOf("�")+1, "�");
-						tempString = s1.toString();
-						break;
-					}
-					case '�':{
-						s1.replace(tempString.indexOf("�"), tempString.indexOf("�")+1, "�");
-						tempString = s1.toString();
-						break;
-					}
-					case '�':{
-						s1.replace(tempString.indexOf("�"), tempString.indexOf("�")+1, "�");
-						tempString = s1.toString();
-						break;
-					}
+					case '–':{
+ 						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("–")+1, "Ö");
+ 						tempString = s1.toString();
+ 						break;
+ 					}
+					case '„':{
+ 						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("„")+1, "Ä");
+ 						tempString = s1.toString();
+ 						break;
+ 					}
+					case '…':{
+ 						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("…")+1, "Å");
+ 						tempString = s1.toString();
+ 						break;
+ 					}
+					case '©':{
+ 						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("©")+1, "é");
+ 						tempString = s1.toString();
+ 						break;
+ 					}
 				}
 			}
 		} 

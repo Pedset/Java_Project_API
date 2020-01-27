@@ -189,55 +189,49 @@ public class test extends HttpServlet {
 	}
 	public String encoding (String tempString) {
 		for (int ii = 0 ; ii < tempString.length() ; ii++) {
-			if (tempString.charAt(ii)=='Ã') {
+			if (tempString.charAt(ii)=='ï¿½') {
 				StringBuffer s1 = new StringBuffer(tempString);
 				switch (tempString.charAt(ii+1)) {
-					case '¶':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¶")+1, "ö");
+					case 'Â¶':{
+						s1.replace(tempString.indexOf("Ãƒ"), tempString.indexOf("Â¶")+1, "Ã¶");
 						tempString = s1.toString();
 						break;
 					}
-					case '¥':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¥")+1, "å");
-						tempString = s1.toString();
-						break;
-					}
-					case '¤':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¤")+1, "ä");
-						tempString = s1.toString();
-						break;
-					}
+					case 'Â¥':{
+ 						s1.replace(tempString.indexOf("Ãƒ"), tempString.indexOf("Â¥")+1, "Ã¥");
+ 						tempString = s1.toString();
+ 						break;
+ 					}
+					case 'Â¤':{
+ 						s1.replace(tempString.indexOf("Ãƒ"), tempString.indexOf("Â¤")+1, "Ã¤");
+ 						tempString = s1.toString();
+ 						break;
+ 					}
 					case '?':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("?")+1, "Ö");
+						s1.replace(tempString.indexOf("ï¿½"), tempString.indexOf("?")+1, "ï¿½");
 						tempString = s1.toString();
 						break;
 					}
-					case '–':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("–")+1, "Ö");
-						tempString = s1.toString();
-						break;
-					}
-					case '„':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("„")+1, "Ä");
-						tempString = s1.toString();
-						break;
-					}
-					case '…':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("…")+1, "Å");
-						tempString = s1.toString();
-						break;
-					}
-					case '©':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("©")+1, "é");
-						tempString = s1.toString();
-						break;
-					
-					}
-					case '¸':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¸")+1, "ø");
-						tempString = s1.toString();
-						break;
-					}
+					case 'â€“':{
+ 						s1.replace(tempString.indexOf("Ãƒ"), tempString.indexOf("â€“")+1, "Ã–");
+ 						tempString = s1.toString();
+ 						break;
+ 					}
+					case 'â€ž':{
+ 						s1.replace(tempString.indexOf("Ãƒ"), tempString.indexOf("â€ž")+1, "Ã„");
+ 						tempString = s1.toString();
+ 						break;
+ 					}
+					case 'â€¦':{
+ 						s1.replace(tempString.indexOf("Ãƒ"), tempString.indexOf("â€¦")+1, "Ã…");
+ 						tempString = s1.toString();
+ 						break;
+ 					}
+					case 'Â©':{
+ 						s1.replace(tempString.indexOf("Ãƒ"), tempString.indexOf("Â©")+1, "Ã©");
+ 						tempString = s1.toString();
+ 						break;
+ 					}
 				}
 			}
 		} 
