@@ -7,15 +7,15 @@
 <meta charset="ISO-8859-1">
 <title>The Bad Date Bus</title>
 
-<link rel = "stylesheet" type = "text/css" href = "style.css" />
+
+  <!-- PureCookie -->
+  <link rel="stylesheet" type="text/css" href="style.css" async />
+  <script src="script.js" async></script>
+  <!--            -->
 
 </head>
 <body>
 
-<div id="cookieConsent">
-    <div id="closeCookieConsent">x</div>
-    This website is using cookies. <a href="#" target="_blank">More info</a>. <a class="cookieConsentOK">That's Fine</a>
-</div>
 
 <h1>The Bad Date Bus</h1>
 <h3>Pick your bus stop</h3>
@@ -46,6 +46,7 @@ City:<input type="text" name="cityName">
 <form action="">
 <input type="submit" value="Repeat your latest search" hidden> <!-- Make invicible if there is no cookie -->
 </form>
+
 
 
 </body>
