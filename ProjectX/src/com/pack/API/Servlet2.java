@@ -44,18 +44,14 @@ public class Servlet2 extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+//		response.getWriter().append("Served at: ").append(request.getContextPath());
 		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		
-		
-		
-		
-		
-		
+
 		
 		request.getRequestDispatcher("index.jsp").include(request, response);
+		
 		
 		try {
 		URL api_url = new URL("http://www.labs.skanetrafiken.se/v2.2/querystation.asp?inpPointfr=" + request.getParameter("cityName"));
@@ -123,8 +119,6 @@ public class Servlet2 extends HttpServlet {
 						
 					
 						out.print("<option>" + encoding(tempString) + " (ID:" + node3.getTextContent() + ")" + "</option>");
-						
-				     // arbies code
 					//	out.print("<option>" + tempString + " (ID:" + node3.getTextContent() + ")" + "</option>");
 						
 										}
@@ -143,12 +137,7 @@ public class Servlet2 extends HttpServlet {
 			out.print(e);
 		}
 		
-		out.flush();
-		
-		
-		
-		
-		
+		out.flush();	
 	}
 	
 	
