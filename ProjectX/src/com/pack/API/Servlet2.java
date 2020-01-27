@@ -47,6 +47,13 @@ public class Servlet2 extends HttpServlet {
 		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
+		
+		
+		
+		
+		
+		
+		
 		request.getRequestDispatcher("index.jsp").include(request, response);
 		
 		try {
@@ -115,8 +122,11 @@ public class Servlet2 extends HttpServlet {
 						
 					
 						out.print("<option>" + encoding(tempString) + " (ID:" + node3.getTextContent() + ")" + "</option>");
+						
+				     // arbies code
+					//	out.print("<option>" + tempString + " (ID:" + node3.getTextContent() + ")" + "</option>");
+						
 										}
-				
 					
 				}
 				}

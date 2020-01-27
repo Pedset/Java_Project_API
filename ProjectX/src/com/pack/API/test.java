@@ -83,10 +83,6 @@ public class test extends HttpServlet {
 			
 			
 			
-			
-			
-			
-			
 		URL api_url1 = new URL("http://www.labs.skanetrafiken.se/v2.2/stationresults.asp?selPointFrKey=" + ftemp);
 		HttpURLConnection linec1 = (HttpURLConnection) api_url1.openConnection();
 		linec1.setDoInput(true);
@@ -105,6 +101,7 @@ public class test extends HttpServlet {
 			// Save the temp line into the full response
 			ApiResponse1 += inputLine1;
 		}
+		
 		in1.close();
 		//System.out.println(ApiResponse);
 		
@@ -155,20 +152,12 @@ public class test extends HttpServlet {
 						out.print("<p>" + encoding(node1.getTextContent()) + ": " + encoding(node2.getTextContent()) + " mot: "  + encoding(node3.getTextContent()) + " tid : " + encoding(node4.getTextContent()) + "</p><br>");
 						
 						
+						// arbies code
+						// out.print("<p>" + node1.getTextContent() + ": " + node2.getTextContent() + " mot: "  + node3.getTextContent() + " tid : " + node4.getTextContent() + "</p><br>");
 						
-					}
-				}
-//			for (int y=0 ; y < TowardsList.getLength(); y++) {
-//				
-//
-//					Node node1= test.LineTypeNameList.item(y);
-//					Node node2= test.NoList.item(y);
-//					Node node3= test.TowardsList.item(y);
-//					Node node4= test.JourneyDateTimeList.item(y);
-//					
-//					out.print("<p>" + encoding(node1.getTextContent()) + ": " + node2.getTextContent() + " mot: "  + encoding(node3.getTextContent()) + " tid : " + encoding(node4.getTextContent()) + "</p><br>");
-//					
-//							}
+							}
+						}
+
 						out.print("hello");
 						
 					
