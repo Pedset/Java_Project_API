@@ -21,14 +21,14 @@
 <h3>Pick your bus stop</h3>
 <br>
 <img width="400" height="180" src="https://66.media.tumblr.com/db740ecf5a9be0e2c3f2e74dacd6541b/tumblr_mroaj81PsW1rka58bo1_500.gif" alt="Pic of a cat">
-<form action="Servlet1">
-<select name="busStop">
-<option>Malmö C</option>
-<option>Malmö Stadshuset</option>
-<option>Lund C</option>
-</select>
-<input type="submit" value="Get away!">
-</form>
+<!-- <form action="Servlet1"> -->
+<!-- <select name="busStop"> -->
+<!-- <option>Malmö C</option> -->
+<!-- <option>Malmö Stadshuset</option> -->
+<!-- <option>Lund C</option> -->
+<!-- </select> -->
+<!-- <input type="submit" value="Get away!"> -->
+<!-- </form> -->
 
 
 
