@@ -47,7 +47,7 @@ public class Servlet2 extends HttpServlet {
 		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		
+		request.getRequestDispatcher("index.jsp").include(request, response);
 		
 		try {
 		URL api_url = new URL("http://www.labs.skanetrafiken.se/v2.2/querystation.asp?inpPointfr=" + request.getParameter("cityName"));
@@ -83,15 +83,7 @@ public class Servlet2 extends HttpServlet {
 		
 		NodeList nList = doc.getElementsByTagName("StartPoints");
 		// loop through the content of the tag
-		out.print("<!DOCTYPE html>\r\n" + 
-				"<html>\r\n" + 
-				"<head>\r\n" + 
-				"<meta charset=\"utf-8\">\r\n" + 
-				"<meta http-equiv=\"Content-type\""+
-				"content=\"text/html; charset=UTF-8\">\r\n" + 
-				"<title>Insert title here</title>\r\n" + 
-				"</head>"
-				+ "");
+		
 
 		out.print("<p>Bus stop</p>");
 		out.print("<form action=\"test\">");

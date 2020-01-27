@@ -32,6 +32,23 @@ import org.xml.sax.InputSource;
  */
 @WebServlet("/test")
 public class test extends HttpServlet {
+	
+	private static NodeList LineTypeNameList ;
+
+	private static NodeList NoList ;
+
+	private static NodeList TowardsList ;
+
+	private static NodeList JourneyDateTimeList ;
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -107,65 +124,63 @@ public class test extends HttpServlet {
 		//out.print(" root element = " + doc1.getDocumentElement().getNodeName());
 		
 		NodeList nList11 = doc1.getElementsByTagName("Lines");
-		out.print(nList11.getLength());
-		out.print("<!DOCTYPE html>\r\n" + 
-				"<html>\r\n" + 
-				"<head>\r\n" + 
-				"<meta charset=\"utf-8\">\r\n" + 
-				"<meta http-equiv=\"Content-type\""+
-				"content=\"text/html; charset=UTF-8\">\r\n" + 
-				"<title>Insert title here</title>\r\n" + 
-				"</head>"
-				+ "");
-			out.print(" x after    ");
-			out.print(nList11.getLength());
+		
+			
 			for (int temp = 0; temp < nList11.getLength() ; temp++) {
 
 			// Save a node of the current list id 
-				out.print("-check1-");
+			
 			Node node = nList11.item(temp);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement55 = (Element) node;
-				out.print("-check2-");
+				
 				
 				
 				NodeList nodelist = eElement55.getElementsByTagName("Line");
 				
-				out.print(" x ");
-				out.print(nodelist.getLength());
-				out.print(" x ");
-				for (int temp2 = 0; temp2 <= nodelist.getLength(); temp2++) {
-					out.print("-check3-");
+
+				for (int temp2 = 0; temp2 < nodelist.getLength(); temp2++) {
+					
 					Node node32 =nodelist.item(temp2);
 					if (node32.getNodeType() == Node.ELEMENT_NODE) {
 						Element eElement1 = (Element) node32;
-						out.print("-check4-");
-						NodeList LineTypeNameList1 = eElement1.getElementsByTagName("Line");
-						out.print(LineTypeNameList1.getLength());
-						NodeList LineTypeNameList = eElement55.getElementsByTagName("LineTypeName");
-
-						NodeList NoList = eElement55.getElementsByTagName("Name");
-
-						NodeList TowardsList = eElement55.getElementsByTagName("Towards");
-
-						NodeList JourneyDateTimeList = eElement55.getElementsByTagName("JourneyDateTime");
 						
 						
-			for (int y=0 ; y < TowardsList.getLength(); y++) {
-					
+						test.LineTypeNameList = eElement55.getElementsByTagName("LineTypeName");
 
-					Node node1= LineTypeNameList.item(y);
-					Node node2= NoList.item(y);
-					Node node3= TowardsList.item(y);
-					Node node4= JourneyDateTimeList.item(y);
-					
-					out.print("<p>" + encoding(node1.getTextContent()) + ": " + node2.getTextContent() + " mot: "  + encoding(node3.getTextContent()) + " tid : " + encoding(node4.getTextContent()) + "</p><br>");
-					
-							}
+						test.NoList = eElement55.getElementsByTagName("Name");
+
+						test.TowardsList = eElement55.getElementsByTagName("Towards");
+
+						test.JourneyDateTimeList = eElement55.getElementsByTagName("JourneyDateTime");
+						// Remove all bullshit from date/time
+						
+						Node node1= test.LineTypeNameList.item(temp2);
+						Node node2= test.NoList.item(temp2);
+						Node node3= test.TowardsList.item(temp2);
+						Node node4= test.JourneyDateTimeList.item(temp2);
+						
+						out.print("<p>" + encoding(node1.getTextContent()) + ": " + encoding(node2.getTextContent()) + " mot: "  + encoding(node3.getTextContent()) + " tid : " + encoding(node4.getTextContent()) + "</p><br>");
+						
+						
+						
+					}
+				}
+//			for (int y=0 ; y < TowardsList.getLength(); y++) {
+//				
+//
+//					Node node1= test.LineTypeNameList.item(y);
+//					Node node2= test.NoList.item(y);
+//					Node node3= test.TowardsList.item(y);
+//					Node node4= test.JourneyDateTimeList.item(y);
+//					
+//					out.print("<p>" + encoding(node1.getTextContent()) + ": " + node2.getTextContent() + " mot: "  + encoding(node3.getTextContent()) + " tid : " + encoding(node4.getTextContent()) + "</p><br>");
+//					
+//							}
 						out.print("hello");
 						
-						}
-					}
+					
+					
 			}
 			
 			}
@@ -235,12 +250,22 @@ public class test extends HttpServlet {
 						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("©")+1, "é");
 						tempString = s1.toString();
 						break;
+					
+					}
+					case '¸':{
+						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¸")+1, "ø");
+						tempString = s1.toString();
+						break;
 					}
 				}
 			}
 		} 
 		return tempString;
 	}
+	
+	
+	
+	
 	
 	private static Document convertStringToXMLDocument(String xmlString) {
 		// Parser that produces DOM object trees from XML content
