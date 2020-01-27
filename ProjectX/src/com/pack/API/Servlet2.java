@@ -1,3 +1,4 @@
+//arbie test commentar
 package com.pack.API;
 
 import java.io.BufferedReader;
@@ -112,7 +113,7 @@ public class Servlet2 extends HttpServlet {
 					Node node2= nL3.item(y);
 					Node node3= nL4.item(y);
 					/*
-					å = Ã¥, ä = Ã¤, ö = Ã¶ , Ö = Ã? eller Ã– , Ä = Ã„ , Å = Ã… , é=Ã©
+					ï¿½ = Ã¥, ï¿½ = Ã¤, ï¿½ = Ã¶ , ï¿½ = ï¿½? eller Ã– , ï¿½ = Ã„ , ï¿½ = Ã… , ï¿½=Ã©
 					
 					*/
 					
@@ -153,46 +154,46 @@ public class Servlet2 extends HttpServlet {
 	
 	public String encoding (String tempString) {
 		for (int ii = 0 ; ii < tempString.length() ; ii++) {
-			if (tempString.charAt(ii)=='Ã') {
+			if (tempString.charAt(ii)=='ï¿½') {
 				StringBuffer s1 = new StringBuffer(tempString);
 				switch (tempString.charAt(ii+1)) {
-					case '¶':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¶")+1, "ö");
+					case 'ï¿½':{
+						s1.replace(tempString.indexOf("ï¿½"), tempString.indexOf("ï¿½")+1, "ï¿½");
 						tempString = s1.toString();
 						break;
 					}
-					case '¥':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¥")+1, "å");
+					case 'ï¿½':{
+						s1.replace(tempString.indexOf("ï¿½"), tempString.indexOf("ï¿½")+1, "ï¿½");
 						tempString = s1.toString();
 						break;
 					}
-					case '¤':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¤")+1, "ä");
+					case 'ï¿½':{
+						s1.replace(tempString.indexOf("ï¿½"), tempString.indexOf("ï¿½")+1, "ï¿½");
 						tempString = s1.toString();
 						break;
 					}
 					case '?':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("?")+1, "Ö");
+						s1.replace(tempString.indexOf("ï¿½"), tempString.indexOf("?")+1, "ï¿½");
 						tempString = s1.toString();
 						break;
 					}
-					case '–':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("–")+1, "Ö");
+					case 'ï¿½':{
+						s1.replace(tempString.indexOf("ï¿½"), tempString.indexOf("ï¿½")+1, "ï¿½");
 						tempString = s1.toString();
 						break;
 					}
-					case '„':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("„")+1, "Ä");
+					case 'ï¿½':{
+						s1.replace(tempString.indexOf("ï¿½"), tempString.indexOf("ï¿½")+1, "ï¿½");
 						tempString = s1.toString();
 						break;
 					}
-					case '…':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("…")+1, "Å");
+					case 'ï¿½':{
+						s1.replace(tempString.indexOf("ï¿½"), tempString.indexOf("ï¿½")+1, "ï¿½");
 						tempString = s1.toString();
 						break;
 					}
-					case '©':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("©")+1, "é");
+					case 'ï¿½':{
+						s1.replace(tempString.indexOf("ï¿½"), tempString.indexOf("ï¿½")+1, "ï¿½");
 						tempString = s1.toString();
 						break;
 					}
