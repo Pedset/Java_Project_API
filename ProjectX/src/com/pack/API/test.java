@@ -29,13 +29,13 @@ import org.xml.sax.InputSource;
 @WebServlet("/test")
 public class test extends HttpServlet {
 
-	private static NodeList LineTypeNameList;
+	private static NodeList LineTypeNameLists;
 
-	private static NodeList NoList;
+	private static NodeList NoLists;
 
-	private static NodeList TowardsList;
+	private static NodeList TowardsLists;
 
-	private static NodeList JourneyDateTimeList;
+	private static NodeList JourneyDateTimeLists;
 
 	private static final long serialVersionUID = 1L;
 
@@ -60,94 +60,65 @@ public class test extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		try {
-			String temp1 = request.getParameter("busStopL");
-			StringBuffer sB = new StringBuffer(temp1);
+			String tempString = request.getParameter("busStopL");
+			StringBuffer sB = new StringBuffer(tempString);
 			String ftemp = "";
-			for (int x1 = 0; x1 < temp1.length(); x1++) {
-				if (temp1.charAt(x1) == 'I') {
-					if (temp1.charAt(x1 + 1) == 'D') {
-						ftemp = sB.substring(x1 + 3, temp1.length() - 1);
+			for (int x1 = 0; x1 < tempString.length(); x1++) {
+				if (tempString.charAt(x1) == 'I') {
+					if (tempString.charAt(x1 + 1) == 'D') {
+						ftemp = sB.substring(x1 + 3, tempString.length() - 1);
 					}
 				}
 			}
 			out.print(ftemp);
 
-			URL api_url1 = new URL("http://www.labs.skanetrafiken.se/v2.2/stationresults.asp?selPointFrKey=" + ftemp);
-			HttpURLConnection linec1 = (HttpURLConnection) api_url1.openConnection();
-			linec1.setDoInput(true);
-			linec1.setDoOutput(true);
-			linec1.setRequestMethod("GET");
+			URL api_url = new URL("http://www.labs.skanetrafiken.se/v2.2/stationresults.asp?selPointFrKey=" + ftemp);
+			HttpURLConnection linec = (HttpURLConnection) api_url.openConnection();
+			linec.setDoInput(true);
+			linec.setDoOutput(true);
+			linec.setRequestMethod("GET");
 
-			BufferedReader in1 = new BufferedReader(new InputStreamReader(linec1.getInputStream()));
-			String inputLine1;
+			BufferedReader in = new BufferedReader(new InputStreamReader(linec.getInputStream()));
+			String inputLine;
 
 			// a String to save the full response to use later
-			String ApiResponse1 = "";
+			String ApiResponse = "";
 			// loop through the whole response
-			while ((inputLine1 = in1.readLine()) != null) {
+			while ((inputLine = in.readLine()) != null) {
 
 				// System.out.println(inputLine);
 				// Save the temp line into the full response
-				ApiResponse1 += inputLine1;
+				ApiResponse += inputLine;
 			}
 
-			in1.close();
-			// System.out.println(ApiResponse);
+			in.close();
 
 			// Call a method to make a XMLdoc out of the full response
-			Document doc1 = convertStringToXMLDocument(ApiResponse1);
+			Document doc = convertStringToXMLDocument(ApiResponse);
 
-			doc1.getDocumentElement().normalize();
+			doc.getDocumentElement().normalize();
+			
+			test.LineTypeNameLists = doc.getElementsByTagName("LineTypeName");
 
-			NodeList nList11 = doc1.getElementsByTagName("Lines");
+			test.NoLists = doc.getElementsByTagName("Name");
 
-			for (int temp = 0; temp < nList11.getLength(); temp++) {
+			test.TowardsLists = doc.getElementsByTagName("Towards");
 
-				// Save a node of the current list id
-
-				Node node = nList11.item(temp);
-				if (node.getNodeType() == Node.ELEMENT_NODE) {
-					Element eElement55 = (Element) node;
-
-					NodeList nodelist = eElement55.getElementsByTagName("Line");
-
-					for (int temp2 = 0; temp2 < nodelist.getLength(); temp2++) {
-
-						Node node32 = nodelist.item(temp2);
-						if (node32.getNodeType() == Node.ELEMENT_NODE) {
-							Element eElement1 = (Element) node32;
-
-							test.LineTypeNameList = eElement55.getElementsByTagName("LineTypeName");
-
-							test.NoList = eElement55.getElementsByTagName("Name");
-
-							test.TowardsList = eElement55.getElementsByTagName("Towards");
-
-							test.JourneyDateTimeList = eElement55.getElementsByTagName("JourneyDateTime");
-							// Remove all bullshit from date/time
-
-							Node node1 = test.LineTypeNameList.item(temp2);
-							Node node2 = test.NoList.item(temp2);
-							Node node3 = test.TowardsList.item(temp2);
-							Node node4 = test.JourneyDateTimeList.item(temp2);
-
-							out.print("<p>" + encoding(node1.getTextContent()) + ": " + encoding(node2.getTextContent())
-									+ " mot: " + encoding(node3.getTextContent()) + " tid : "
-									+ encoding(node4.getTextContent()) + "</p><br>");
-
-							// arbies code
-							// out.print("<p>" + node1.getTextContent() + ": " + node2.getTextContent() + "
-							// mot: " + node3.getTextContent() + " tid : " + node4.getTextContent() +
-							// "</p><br>");
-
-						}
-					}
-
-					out.print("hello");
-
-				}
-
+			test.JourneyDateTimeLists = doc.getElementsByTagName("JourneyDateTime");
+			
+			out.print("<ul>");
+			for (int index = 0; index < LineTypeNameLists.getLength(); index++) {
+				StringBuffer theString = new StringBuffer(test.JourneyDateTimeLists.item(index).getTextContent());
+				
+				out.print("<li>" + encoding(test.LineTypeNameLists.item(index).getTextContent()) + " " + encoding(test.NoLists.item(index).getTextContent())
+				+ ", Mot " + encoding(test.TowardsLists.item(index).getTextContent()) + "<br> Avgångstid: "
+				+ encoding(theString.substring(11, theString.length()-3)) + "</li><br><br>");
 			}
+			out.print("</ul>");
+			
+				
+
+			
 
 		} catch (Exception e) {
 			out.print(e);
@@ -157,54 +128,54 @@ public class test extends HttpServlet {
 
 	}
 
-	public String encoding(String tempString) {
-		for (int ii = 0; ii < tempString.length(); ii++) {
-			if (tempString.charAt(ii) == 'ï¿½') {
+	public String encoding (String tempString) {
+		for (int ii = 0 ; ii < tempString.length() ; ii++) {
+			if (tempString.charAt(ii)=='Ã') {
 				StringBuffer s1 = new StringBuffer(tempString);
-				switch (tempString.charAt(ii + 1)) {
-				case 'Â¶': {
-					s1.replace(tempString.indexOf("Ãƒ"), tempString.indexOf("Â¶") + 1, "Ã¶");
-					tempString = s1.toString();
-					break;
-				}
-				case 'Â¥': {
-					s1.replace(tempString.indexOf("Ãƒ"), tempString.indexOf("Â¥") + 1, "Ã¥");
-					tempString = s1.toString();
-					break;
-				}
-				case 'Â¤': {
-					s1.replace(tempString.indexOf("Ãƒ"), tempString.indexOf("Â¤") + 1, "Ã¤");
-					tempString = s1.toString();
-					break;
-				}
-				case '?': {
-					s1.replace(tempString.indexOf("ï¿½"), tempString.indexOf("?") + 1, "ï¿½");
-					tempString = s1.toString();
-					break;
-				}
-				case 'â€“': {
-					s1.replace(tempString.indexOf("Ãƒ"), tempString.indexOf("â€“") + 1, "Ã–");
-					tempString = s1.toString();
-					break;
-				}
-				case 'â€ž': {
-					s1.replace(tempString.indexOf("Ãƒ"), tempString.indexOf("â€ž") + 1, "Ã„");
-					tempString = s1.toString();
-					break;
-				}
-				case 'â€¦': {
-					s1.replace(tempString.indexOf("Ãƒ"), tempString.indexOf("â€¦") + 1, "Ã…");
-					tempString = s1.toString();
-					break;
-				}
-				case 'Â©': {
-					s1.replace(tempString.indexOf("Ãƒ"), tempString.indexOf("Â©") + 1, "Ã©");
-					tempString = s1.toString();
-					break;
-				}
+				switch (tempString.charAt(ii+1)) {
+					case '¶':{
+						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¶")+1, "ö");
+						tempString = s1.toString();
+						break;
+					}
+					case '¥':{
+						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¥")+1, "å");
+						tempString = s1.toString();
+						break;
+					}
+					case '¤':{
+						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¤")+1, "ä");
+						tempString = s1.toString();
+						break;
+					}
+					case '?':{
+						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("?")+1, "Ö");
+						tempString = s1.toString();
+						break;
+					}
+					case '–':{
+						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("–")+1, "Ö");
+						tempString = s1.toString();
+						break;
+					}
+					case '„':{
+						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("„")+1, "Ä");
+						tempString = s1.toString();
+						break;
+					}
+					case '…':{
+						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("…")+1, "Å");
+						tempString = s1.toString();
+						break;
+					}
+					case '©':{
+						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("©")+1, "é");
+						tempString = s1.toString();
+						break;
+					}
 				}
 			}
-		}
+		} 
 		return tempString;
 	}
 
