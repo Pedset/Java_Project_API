@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.dom4j.io.SAXReader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -40,12 +39,6 @@ public class test extends HttpServlet {
 	private static NodeList TowardsList ;
 
 	private static NodeList JourneyDateTimeList ;
-	
-	
-	
-	
-	
-	
 	
 	
 	
@@ -83,7 +76,16 @@ public class test extends HttpServlet {
 				}
 			}
 			out.print(ftemp);
-			System.out.printf(ftemp);
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			
 		URL api_url1 = new URL("http://www.labs.skanetrafiken.se/v2.2/stationresults.asp?selPointFrKey=" + ftemp);
 		HttpURLConnection linec1 = (HttpURLConnection) api_url1.openConnection();
@@ -111,17 +113,7 @@ public class test extends HttpServlet {
 		Document doc1 = convertStringToXMLDocument(ApiResponse1);
 		
 		doc1.getDocumentElement().normalize();
-		// check that the XML response is OK by getting the Root element 
-		//System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-
-		// Create a Node list that gets everything in and under the "clouds" tag  
 		
-	//	SAXReader reader = new SAXReader();
-		//Document document = (Document) reader.read("http://www.labs.skanetrafiken.se/v2.2/stationresults.asp?selPointFrKey=80000");
-		
-		
-		
-		//out.print(" root element = " + doc1.getDocumentElement().getNodeName());
 		
 		NodeList nList11 = doc1.getElementsByTagName("Lines");
 		

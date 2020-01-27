@@ -47,31 +47,12 @@ public class Servlet1 extends HttpServlet {
 		
 		
 		
+	
 		
 		
 		
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		// martin 
-		
-		
-		
-		// martin
 		
 		
 	}
