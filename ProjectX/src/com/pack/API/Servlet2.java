@@ -120,7 +120,7 @@ public class Servlet2 extends HttpServlet {
 					
 						
 					
-						out.print("<option>" + encoding(tempString) + " (ID:" + node3.getTextContent() + ")" + "</option>");
+						out.print("<option>" + encoding(tempString) + "</option>");
 					//	out.print("<option>" + tempString + " (ID:" + node3.getTextContent() + ")" + "</option>");
 						
 										}

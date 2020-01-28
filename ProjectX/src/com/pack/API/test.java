@@ -108,13 +108,17 @@ public class test extends HttpServlet {
 			for (int index = 0; index < LineTypeNameLists.getLength(); index++) {
 				StringBuffer theString = new StringBuffer(test.JourneyDateTimeLists.item(index).getTextContent());
 						
-			// Removes trains and airport shuttles from the results
-				if (!encoding(test.LineTypeNameLists.item(index).getTextContent()).matches("Pågatågen|Öresundståg|Flygbuss")) {
-					out.print("<li>" + encoding(test.LineTypeNameLists.item(index).getTextContent()) + " " + encoding(test.NoLists.item(index).getTextContent())
-					+ " mot " + encoding(test.TowardsLists.item(index).getTextContent()) + "<br> Avgångstid: "
-					+ encoding(theString.substring(11, theString.length()-3)) + "</li><br><br>");
+			// Removes trains and airport shuttles from the results and fixes some issues with how SkåneExpressen was printed
+				if (encoding(test.LineTypeNameLists.item(index).getTextContent()).matches("SkåneExpressen")) {
+					out.print("<li>" + encoding(test.NoLists.item(index).getTextContent())
+						+ " mot " + encoding(test.TowardsLists.item(index).getTextContent().replaceAll("SkÃ¥neExpressen ", "")) + "<br> Avgångstid: "
+						+ encoding(theString.substring(11, theString.length()-3)) + "</li><br><br>");
+				} else if (!encoding(test.LineTypeNameLists.item(index).getTextContent()).matches("Pågatågen|Öresundståg|Flygbuss")) {
+						out.print("<li>" + encoding(test.LineTypeNameLists.item(index).getTextContent()) + " " + encoding(test.NoLists.item(index).getTextContent())
+						+ " mot " + encoding(test.TowardsLists.item(index).getTextContent()) + "<br> Avgångstid: "
+						+ encoding(theString.substring(11, theString.length()-3)) + "</li><br><br>");
+					}
 				}
-			}
 			out.print("</ul>");
 			
 		}
