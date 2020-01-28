@@ -101,20 +101,23 @@ public class test extends HttpServlet {
 			
 			out.print("<ul>");
 			
-			//since the length of our list for these 4 NodeLists are same (Well I hope so) we just used LineTypeNameLists.getLength()
+			//since the length of our list for these 4 NodeLists are same we just used LineTypeNameLists.getLength()
 			//We want to loop thru them and take each item out of all 4 NodeLists and use them to print out our html list
 			//We had NodeList from the start, the code ".item(index)" returns a single Node item that is in our NodeList at a specific index
 			//".getTextContent()" returns content of that node in a String format which we send as a parameter to the encoding method (to fix the characters)
 			for (int index = 0; index < LineTypeNameLists.getLength(); index++) {
 				StringBuffer theString = new StringBuffer(test.JourneyDateTimeLists.item(index).getTextContent());
-				
-				out.print("<li>" + encoding(test.LineTypeNameLists.item(index).getTextContent()) + " " + encoding(test.NoLists.item(index).getTextContent())
-				+ ", Mot " + encoding(test.TowardsLists.item(index).getTextContent()) + "<br> Avgångstid: "
-				+ encoding(theString.substring(11, theString.length()-3)) + "</li><br><br>");
+						
+			// Removes trains and airport shuttles from the results
+				if (!encoding(test.LineTypeNameLists.item(index).getTextContent()).matches("Pågatågen|Öresundståg|Flygbuss")) {
+					out.print("<li>" + encoding(test.LineTypeNameLists.item(index).getTextContent()) + " " + encoding(test.NoLists.item(index).getTextContent())
+					+ " mot " + encoding(test.TowardsLists.item(index).getTextContent()) + "<br> Avgångstid: "
+					+ encoding(theString.substring(11, theString.length()-3)) + "</li><br><br>");
+				}
 			}
 			out.print("</ul>");
 			
-		} 
+		}
 		catch (Exception e) {
 			out.print(e);
 		}
