@@ -28,15 +28,12 @@ import org.xml.sax.InputSource;
  */
 @WebServlet("/test")
 public class test extends HttpServlet {
-
+	// creating NodeLists variables to store the date extracted from the xml file
 	private static NodeList LineTypeNameLists;
-
 	private static NodeList NoLists;
-
 	private static NodeList TowardsLists;
-
 	private static NodeList JourneyDateTimeLists;
-
+	
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -54,12 +51,14 @@ public class test extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
 
+		// Setting content type to text/html and create a PrintWriter named "out"
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 
+		
 		try {
+			// first we need to get the ID from the parameter "busStopL" so we can use it in our API URL
 			String tempString = request.getParameter("busStopL");
 			StringBuffer sB = new StringBuffer(tempString);
 			String ftemp = "";
@@ -70,43 +69,42 @@ public class test extends HttpServlet {
 					}
 				}
 			}
-			out.print(ftemp);
-
+			
+			// Doing a Http request type GET 
 			URL api_url = new URL("http://www.labs.skanetrafiken.se/v2.2/stationresults.asp?selPointFrKey=" + ftemp);
 			HttpURLConnection linec = (HttpURLConnection) api_url.openConnection();
 			linec.setDoInput(true);
 			linec.setDoOutput(true);
 			linec.setRequestMethod("GET");
-
+			
+			// Reads the file received from the api request 
 			BufferedReader in = new BufferedReader(new InputStreamReader(linec.getInputStream()));
 			String inputLine;
 
-			// a String to save the full response to use later
+			// An empty String to save the full response to use later
 			String ApiResponse = "";
-			// loop through the whole response
+			// loop through the whole response reading every line and as long as its not equal to null we append it to our "ApiResponse" variable.
 			while ((inputLine = in.readLine()) != null) {
-
-				// System.out.println(inputLine);
-				// Save the temp line into the full response
 				ApiResponse += inputLine;
 			}
-
 			in.close();
-
+			
 			// Call a method to make a XMLdoc out of the full response
 			Document doc = convertStringToXMLDocument(ApiResponse);
-
 			doc.getDocumentElement().normalize();
 			
+			// Extracting all the data with the tag names LineTypeName, Name ...etc and store them all in 4 different NodeList that was created globally 
 			test.LineTypeNameLists = doc.getElementsByTagName("LineTypeName");
-
 			test.NoLists = doc.getElementsByTagName("Name");
-
 			test.TowardsLists = doc.getElementsByTagName("Towards");
-
 			test.JourneyDateTimeLists = doc.getElementsByTagName("JourneyDateTime");
 			
 			out.print("<ul>");
+			
+			//since the length of our list for these 4 NodeLists are same (Well I hope so) we just used LineTypeNameLists.getLength()
+			//We want to loop thru them and take each item out of all 4 NodeLists and use them to print out our html list
+			//We had NodeList from the start, the code ".item(index)" returns a single Node item that is in our NodeList at a specific index
+			//".getTextContent()" returns content of that node in a String format which we send as a parameter to the encoding method (to fix the characters)
 			for (int index = 0; index < LineTypeNameLists.getLength(); index++) {
 				StringBuffer theString = new StringBuffer(test.JourneyDateTimeLists.item(index).getTextContent());
 				
@@ -116,18 +114,14 @@ public class test extends HttpServlet {
 			}
 			out.print("</ul>");
 			
-				
-
-			
-
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			out.print(e);
 		}
 
-		out.print("last");
-
 	}
 
+	// this method fixes the fucked up characters instead of (едц)
 	public String encoding (String tempString) {
 		for (int ii = 0 ; ii < tempString.length() ; ii++) {
 			if (tempString.charAt(ii)=='Г') {
@@ -179,11 +173,11 @@ public class test extends HttpServlet {
 		return tempString;
 	}
 
+	// method that parse the String to XML document using DocumentBuilderFactory
 	private static Document convertStringToXMLDocument(String xmlString) {
 		// Parser that produces DOM object trees from XML content
 		DocumentBuilderFactory factory1 = DocumentBuilderFactory.newInstance();
-		//
-		// factory.setNamespaceAware(true);
+		
 		// API to obtain DOM Document instance
 		DocumentBuilder builder = null;
 
