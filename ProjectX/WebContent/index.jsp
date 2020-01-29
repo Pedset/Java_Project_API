@@ -16,6 +16,7 @@
 </head>
 <body>
 
+	<div id="all">
 
 	<h1>The Bad Date Bus</h1>
 	<h3>Pick your bus stop</h3>
@@ -51,6 +52,6 @@
 		<!-- Make invicible if there is no cookie -->
 	</form>
 
-
+</div>
 </body>
 </html>
