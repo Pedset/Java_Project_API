@@ -7,6 +7,11 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -98,28 +103,38 @@ public class test extends HttpServlet {
 			test.NoLists = doc.getElementsByTagName("Name");
 			test.TowardsLists = doc.getElementsByTagName("Towards");
 			test.JourneyDateTimeLists = doc.getElementsByTagName("JourneyDateTime");
-			
+						
 			out.print("<ul>");
 			
-			//since the length of our list for these 4 NodeLists are same we just used LineTypeNameLists.getLength()
-			//We want to loop thru them and take each item out of all 4 NodeLists and use them to print out our html list
-			//We had NodeList from the start, the code ".item(index)" returns a single Node item that is in our NodeList at a specific index
-			//".getTextContent()" returns content of that node in a String format which we send as a parameter to the encoding method (to fix the characters)
-			for (int index = 0; index < LineTypeNameLists.getLength(); index++) {
-				StringBuffer theString = new StringBuffer(test.JourneyDateTimeLists.item(index).getTextContent());
-						
-			// Removes trains and airport shuttles from the results and fixes some issues with how SkåneExpressen was printed
-				if (encoding(test.LineTypeNameLists.item(index).getTextContent()).matches("SkåneExpressen")) {
-					out.print("<li>" + encoding(test.NoLists.item(index).getTextContent())
-						+ " mot " + encoding(test.TowardsLists.item(index).getTextContent().replaceAll("SkÃ¥neExpressen ", "")) + "<br> Avgångstid: "
-						+ encoding(theString.substring(11, theString.length()-3)) + "</li><br><br>");
-				} else if (!encoding(test.LineTypeNameLists.item(index).getTextContent()).matches("Pågatågen|Öresundståg|Flygbuss")) {
-						out.print("<li>" + encoding(test.LineTypeNameLists.item(index).getTextContent()) + " " + encoding(test.NoLists.item(index).getTextContent())
-						+ " mot " + encoding(test.TowardsLists.item(index).getTextContent()) + "<br> Avgångstid: "
-						+ encoding(theString.substring(11, theString.length()-3)) + "</li><br><br>");
+				//since the length of our list for these 4 NodeLists are same we just used LineTypeNameLists.getLength()
+				//We want to loop thru them and take each item out of all 4 NodeLists and use them to print out our html list
+				//We had NodeList from the start, the code ".item(index)" returns a single Node item that is in our NodeList at a specific index
+				//".getTextContent()" returns content of that node in a String format which we send as a parameter to the encoding method (to fix the characters)
+				
+				for (int index = 0; index < LineTypeNameLists.getLength(); index++) {
+					StringBuffer theString = new StringBuffer(test.JourneyDateTimeLists.item(index).getTextContent());
+							
+					String departureTime = encoding(theString.substring(11, theString.length()-3));
+					
+					// Creates variables for current time and current time plus ten minutes, to only show busses for the next ten minutes
+					DateTimeFormatter parser = DateTimeFormatter.ofPattern("HH:mm");
+					LocalTime currentTime = LocalTime.parse(departureTime, parser);
+					LocalTime endTime = LocalTime.now().plusMinutes(10);
+					
+					if (currentTime.isBefore(endTime)) {						
+						// Removes trains and airport shuttles from the results and fixes some issues with how SkåneExpressen was printed
+						if (encoding(test.LineTypeNameLists.item(index).getTextContent()).matches("SkåneExpressen")) {
+							out.print("<li>" + encoding(test.NoLists.item(index).getTextContent())
+								+ " mot " + encoding(test.TowardsLists.item(index).getTextContent().replaceAll("SkÃ¥neExpressen ", "")) + "<br> Avgångstid: "
+								+ departureTime + "</li><br><br>");
+						} else if (!encoding(test.LineTypeNameLists.item(index).getTextContent()).matches("Pågatågen|Öresundståg|Flygbuss")) {
+								out.print("<li>" + encoding(test.LineTypeNameLists.item(index).getTextContent()) + " " + encoding(test.NoLists.item(index).getTextContent())
+								+ " mot " + encoding(test.TowardsLists.item(index).getTextContent()) + "<br> Avgångstid: "
+								+ departureTime + "</li><br><br>");
+						}
 					}
 				}
-			out.print("</ul>");
+				out.print("</ul>");
 			
 		}
 		catch (Exception e) {
