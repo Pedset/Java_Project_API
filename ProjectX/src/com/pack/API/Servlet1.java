@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class Servlet1
  */
-@WebServlet("/Servlet1")
+@WebServlet("/cookie")
 public class Servlet1 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -34,7 +34,7 @@ public class Servlet1 extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		
-		
+		//Cookie cookie[] = respon
 		
 		
 		

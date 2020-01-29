@@ -48,15 +48,15 @@ public class Servlet2 extends HttpServlet {
 		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-
 		
 		request.getRequestDispatcher("index.jsp").include(request, response);
 		if (request.getParameter("cityName").equals("")) {
+			
 			request.getRequestDispatcher("ErrorPage.jsp").include(request, response);
 		}
 		else {
 			try {
-		URL api_url = new URL("http://www.labs.skanetrafiken.se/v2.2/querystation.asp?inpPointfr=" + request.getParameter("cityName"));
+		URL api_url = new URL("http://www.labs.skanetrafiken.se/v2.2/querystation.asp?inpPointfr=" + request.getParameter("cityName").replaceAll("\\s",""));
 		HttpURLConnection linec = (HttpURLConnection) api_url.openConnection();
 		linec.setDoInput(true);
 		linec.setDoOutput(true);
