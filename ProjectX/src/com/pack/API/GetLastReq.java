@@ -73,67 +73,11 @@ public class GetLastReq extends HttpServlet {
 			out.print("</head>");
 			out.print("<body>");
 			out.print("<div>");
-			
-			// Doing a Http request type GET 
-			URL api_url = new URL("http://www.labs.skanetrafiken.se/v2.2/stationresults.asp?selPointFrKey=" + idtemp );
-			HttpURLConnection linec = (HttpURLConnection) api_url.openConnection();
-			linec.setDoInput(true);
-			linec.setDoOutput(true);
-			linec.setRequestMethod("GET");
-			
-			// Reads the file received from the api request 
-			BufferedReader in = new BufferedReader(new InputStreamReader(linec.getInputStream()));
-			String inputLine;
 
-			// An empty String to save the full response to use later
-			String ApiResponse = "";
-			// loop through the whole response reading every line and as long as its not equal to null we append it to our "ApiResponse" variable.
-			while ((inputLine = in.readLine()) != null) {
-				ApiResponse += inputLine;
-			}
-			in.close();
+			APIcall getbusList = new APIcall();
 			
-			// Call a method to make a XMLdoc out of the full response
-			Document doc = convertStringToXMLDocument(ApiResponse);
-			doc.getDocumentElement().normalize();
+			out.print(getbusList.getBusList(idtemp));
 			
-			// Extracting all the data with the tag names LineTypeName, Name ...etc and store them all in 4 different NodeList that was created globally 
-			GetLastReq.LineTypeNameLists = doc.getElementsByTagName("LineTypeName");
-			GetLastReq.NoLists = doc.getElementsByTagName("Name");
-			GetLastReq.TowardsLists = doc.getElementsByTagName("Towards");
-			GetLastReq.JourneyDateTimeLists = doc.getElementsByTagName("JourneyDateTime");
-						
-			out.print("<ul>");
-			
-				//since the length of our list for these 4 NodeLists are same we just used LineTypeNameLists.getLength()
-				//We want to loop thru them and take each item out of all 4 NodeLists and use them to print out our html list
-				//We had NodeList from the start, the code ".item(index)" returns a single Node item that is in our NodeList at a specific index
-				//".getTextContent()" returns content of that node in a String format which we send as a parameter to the encoding method (to fix the characters)
-				
-				for (int index = 0; index < LineTypeNameLists.getLength(); index++) {
-					StringBuffer theString = new StringBuffer(GetLastReq.JourneyDateTimeLists.item(index).getTextContent());
-							
-					String departureTime = encoding(theString.substring(11, theString.length()-3));
-					
-					// Creates variables for current time and current time plus ten minutes, to only show busses for the next ten minutes
-					DateTimeFormatter parser = DateTimeFormatter.ofPattern("HH:mm");
-					LocalTime currentTime = LocalTime.parse(departureTime, parser);
-					LocalTime endTime = LocalTime.now().plusMinutes(10);
-					
-					if (currentTime.isBefore(endTime)) {						
-						// Removes trains and airport shuttles from the results and fixes some issues with how SkåneExpressen was printed
-						if (encoding(GetLastReq.LineTypeNameLists.item(index).getTextContent()).matches("SkåneExpressen")) {
-							out.print("<li>" + encoding(GetLastReq.NoLists.item(index).getTextContent())
-								+ " mot " + encoding(GetLastReq.TowardsLists.item(index).getTextContent().replaceAll("SkÃ¥neExpressen ", "")) + "<br> Avgångstid: "
-								+ departureTime + "</li><br><br>");
-						} else if (!encoding(GetLastReq.LineTypeNameLists.item(index).getTextContent()).matches("Pågatågen|Öresundståg|Flygbuss")) {
-								out.print("<li>" + encoding(GetLastReq.LineTypeNameLists.item(index).getTextContent()) + " " + encoding(GetLastReq.NoLists.item(index).getTextContent())
-								+ " mot " + encoding(GetLastReq.TowardsLists.item(index).getTextContent()) + "<br> Avgångstid: "
-								+ departureTime + "</li><br><br>");
-						}
-					}
-				}
-				out.print("</ul>");
 				out.print("</div>");
 				out.print("</body>");
 		}
@@ -143,78 +87,6 @@ public class GetLastReq extends HttpServlet {
 
 	}
 
-	// this method fixes the fucked up characters instead of (åäö)
-	public String encoding (String tempString) {
-		for (int ii = 0 ; ii < tempString.length() ; ii++) {
-			if (tempString.charAt(ii)=='Ã') {
-				StringBuffer s1 = new StringBuffer(tempString);
-				switch (tempString.charAt(ii+1)) {
-					case '¶':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¶")+1, "ö");
-						tempString = s1.toString();
-						break;
-					}
-					case '¥':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¥")+1, "å");
-						tempString = s1.toString();
-						break;
-					}
-					case '¤':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("¤")+1, "ä");
-						tempString = s1.toString();
-						break;
-					}
-					case '?':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("?")+1, "Ö");
-						tempString = s1.toString();
-						break;
-					}
-					case '–':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("–")+1, "Ö");
-						tempString = s1.toString();
-						break;
-					}
-					case '„':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("„")+1, "Ä");
-						tempString = s1.toString();
-						break;
-					}
-					case '…':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("…")+1, "Å");
-						tempString = s1.toString();
-						break;
-					}
-					case '©':{
-						s1.replace(tempString.indexOf("Ã"), tempString.indexOf("©")+1, "é");
-						tempString = s1.toString();
-						break;
-					}
-				}
-			}
-		} 
-		return tempString;
-	}
-
-	// method that parse the String to XML document using DocumentBuilderFactory
-	private static Document convertStringToXMLDocument(String xmlString) {
-		// Parser that produces DOM object trees from XML content
-		DocumentBuilderFactory factory1 = DocumentBuilderFactory.newInstance();
-		
-		// API to obtain DOM Document instance
-		DocumentBuilder builder = null;
-
-		try {
-			// Create DocumentBuilder with default configuration
-			builder = factory1.newDocumentBuilder();
-
-			// Parse the content to Document object
-			Document doc = builder.parse(new InputSource(new StringReader(xmlString)));
-			return doc;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
