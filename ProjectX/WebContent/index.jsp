@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,18 +38,20 @@
 
 	<br>
 	<br>
-	<form action="BusStops">
-		City:<input type="text" name="cityName"> <input type="submit"
-			value="Search bus stops">
-	</form>
+	<%
+
+	
+	out.print("<form action=\"BusStops\">" +
+		"City:<input type=\"text\" name=\"cityName\"> <input type=\"submit\"" +
+			"value=\"Search bus stops\">" +
+		"</form>");
+	
+	
+	%>
 	<br>
-	<form action="Servlet2">
-		<input type="submit" value="Your last searched bus">
-	</form>
-	<br>
-	<form action="">
-		<input type="submit" value="Repeat your latest search" hidden>
-		<!-- Make invicible if there is no cookie -->
+	<form action="GetLastReq" method="post">
+		<input type="submit" value="Repeat your latest search">
+		
 	</form>
 
 </div>

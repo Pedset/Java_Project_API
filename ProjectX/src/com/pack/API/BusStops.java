@@ -11,6 +11,7 @@ import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,13 +29,13 @@ import org.xml.sax.InputSource;
  * Servlet implementation class Servlet2
  */
 @WebServlet("/BusStops")
-public class Servlet2 extends HttpServlet {
+public class BusStops extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Servlet2() {
+    public BusStops() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -50,11 +51,10 @@ public class Servlet2 extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		request.getRequestDispatcher("index.jsp").include(request, response);
-		if (request.getParameter("cityName").equals("")) {
-			
+		
+		if ( request.getParameter("cityName").equals("")) {
 			request.getRequestDispatcher("ErrorPage.jsp").include(request, response);
 		}
-		else {
 			try {
 		URL api_url = new URL("http://www.labs.skanetrafiken.se/v2.2/querystation.asp?inpPointfr=" + request.getParameter("cityName").replaceAll("\\s",""));
 		HttpURLConnection linec = (HttpURLConnection) api_url.openConnection();
@@ -91,9 +91,9 @@ public class Servlet2 extends HttpServlet {
 		// loop through the content of the tag
 		
 
-		out.print("<p>Bus stop</p>");
+		out.print("<div id=\"all\">");
 		out.print("<form action=\"test\">");
-		out.print("<select name=\"busStopL\">");
+		out.print("<select id=\"123f\" name=\"busStopL\">");
 		for (int temp = 0; temp < nList.getLength(); temp++) {
 			
 			// Save a node of the current list id 
@@ -133,6 +133,8 @@ public class Servlet2 extends HttpServlet {
 		out.print("<br><input type=\"submit\" value=\"Search for bus\">");
 		out.print("</form>");
 
+		out.print("</div>");
+
 		}
 		
 		catch (Exception e) {
@@ -141,7 +143,7 @@ public class Servlet2 extends HttpServlet {
 		
 		out.flush();	
 	
-		}
+		
 		
 	}
 	

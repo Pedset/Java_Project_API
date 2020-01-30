@@ -1,5 +1,6 @@
 package com.pack.API;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,6 +16,7 @@ import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,54 +31,51 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 /**
- * Servlet implementation class test
+ * Servlet implementation class GetLastReq
  */
-@WebServlet("/test")
-public class test extends HttpServlet {
-	// creating NodeLists variables to store the date extracted from the xml file
+@WebServlet("/GetLastReq")
+public class GetLastReq extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
 	private static NodeList LineTypeNameLists;
 	private static NodeList NoLists;
 	private static NodeList TowardsLists;
 	private static NodeList JourneyDateTimeLists;
-	
-	private static final long serialVersionUID = 1L;
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public GetLastReq() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
 	/**
-	 * @see HttpServlet#HttpServlet()
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	public test() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-
-		// Setting content type to text/html and create a PrintWriter named "out"
+		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 
 		
 		try {
-			// first we need to get the ID from the parameter "busStopL" so we can use it in our API URL
-			String tempString = request.getParameter("busStopL");
-			StringBuffer sB = new StringBuffer(tempString);
-			String ftemp = "";
-			for (int x1 = 0; x1 < tempString.length(); x1++) {
-				if (tempString.charAt(x1) == 'I') {
-					if (tempString.charAt(x1 + 1) == 'D') {
-						ftemp = sB.substring(x1 + 3, tempString.length() - 1);
-					}
+			
+			Cookie ck[] = request.getCookies();
+			String idtemp = "";
+			for (Cookie cookie : ck) {
+				if (cookie.getName().equals("cityId")) {
+					idtemp = cookie.getValue();
 				}
 			}
+			out.print("<head>");
+			out.print("<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" async />");
+			out.print("</head>");
+			out.print("<body>");
+			out.print("<div>");
 			
 			// Doing a Http request type GET 
-			URL api_url = new URL("http://www.labs.skanetrafiken.se/v2.2/stationresults.asp?selPointFrKey=" + ftemp);
+			URL api_url = new URL("http://www.labs.skanetrafiken.se/v2.2/stationresults.asp?selPointFrKey=" + idtemp );
 			HttpURLConnection linec = (HttpURLConnection) api_url.openConnection();
 			linec.setDoInput(true);
 			linec.setDoOutput(true);
@@ -99,10 +98,10 @@ public class test extends HttpServlet {
 			doc.getDocumentElement().normalize();
 			
 			// Extracting all the data with the tag names LineTypeName, Name ...etc and store them all in 4 different NodeList that was created globally 
-			test.LineTypeNameLists = doc.getElementsByTagName("LineTypeName");
-			test.NoLists = doc.getElementsByTagName("Name");
-			test.TowardsLists = doc.getElementsByTagName("Towards");
-			test.JourneyDateTimeLists = doc.getElementsByTagName("JourneyDateTime");
+			GetLastReq.LineTypeNameLists = doc.getElementsByTagName("LineTypeName");
+			GetLastReq.NoLists = doc.getElementsByTagName("Name");
+			GetLastReq.TowardsLists = doc.getElementsByTagName("Towards");
+			GetLastReq.JourneyDateTimeLists = doc.getElementsByTagName("JourneyDateTime");
 						
 			out.print("<ul>");
 			
@@ -112,7 +111,7 @@ public class test extends HttpServlet {
 				//".getTextContent()" returns content of that node in a String format which we send as a parameter to the encoding method (to fix the characters)
 				
 				for (int index = 0; index < LineTypeNameLists.getLength(); index++) {
-					StringBuffer theString = new StringBuffer(test.JourneyDateTimeLists.item(index).getTextContent());
+					StringBuffer theString = new StringBuffer(GetLastReq.JourneyDateTimeLists.item(index).getTextContent());
 							
 					String departureTime = encoding(theString.substring(11, theString.length()-3));
 					
@@ -123,19 +122,20 @@ public class test extends HttpServlet {
 					
 					if (currentTime.isBefore(endTime)) {						
 						// Removes trains and airport shuttles from the results and fixes some issues with how SkåneExpressen was printed
-						if (encoding(test.LineTypeNameLists.item(index).getTextContent()).matches("SkåneExpressen")) {
-							out.print("<li>" + encoding(test.NoLists.item(index).getTextContent())
-								+ " mot " + encoding(test.TowardsLists.item(index).getTextContent().replaceAll("SkÃ¥neExpressen ", "")) + "<br> Avgångstid: "
+						if (encoding(GetLastReq.LineTypeNameLists.item(index).getTextContent()).matches("SkåneExpressen")) {
+							out.print("<li>" + encoding(GetLastReq.NoLists.item(index).getTextContent())
+								+ " mot " + encoding(GetLastReq.TowardsLists.item(index).getTextContent().replaceAll("SkÃ¥neExpressen ", "")) + "<br> Avgångstid: "
 								+ departureTime + "</li><br><br>");
-						} else if (!encoding(test.LineTypeNameLists.item(index).getTextContent()).matches("Pågatågen|Öresundståg|Flygbuss")) {
-								out.print("<li>" + encoding(test.LineTypeNameLists.item(index).getTextContent()) + " " + encoding(test.NoLists.item(index).getTextContent())
-								+ " mot " + encoding(test.TowardsLists.item(index).getTextContent()) + "<br> Avgångstid: "
+						} else if (!encoding(GetLastReq.LineTypeNameLists.item(index).getTextContent()).matches("Pågatågen|Öresundståg|Flygbuss")) {
+								out.print("<li>" + encoding(GetLastReq.LineTypeNameLists.item(index).getTextContent()) + " " + encoding(GetLastReq.NoLists.item(index).getTextContent())
+								+ " mot " + encoding(GetLastReq.TowardsLists.item(index).getTextContent()) + "<br> Avgångstid: "
 								+ departureTime + "</li><br><br>");
 						}
 					}
 				}
 				out.print("</ul>");
-			
+				out.print("</div>");
+				out.print("</body>");
 		}
 		catch (Exception e) {
 			out.print(e);
@@ -215,13 +215,10 @@ public class test extends HttpServlet {
 		}
 		return null;
 	}
-
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
